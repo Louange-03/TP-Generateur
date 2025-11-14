@@ -1,6 +1,6 @@
 // app/components/Prime.jsx
 
-export default function Prime({ number, isPrime }) {
+export function Prime({ number, isPrime }) {
   if (number == null) return null;
 
   return (
