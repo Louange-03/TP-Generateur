@@ -1,4 +1,4 @@
-import { numberSchema } from "../schemas/numberSchema.jsx";
+import { numberSchema } from "../../schemas/numberSchema.jsx";
 
 export async function fetchNumberAlea() {
   await new Promise((resolve) => setTimeout(resolve, 500));
