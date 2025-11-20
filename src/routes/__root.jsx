@@ -1,3 +1,4 @@
+// src/routes/__root.jsx
 import {
   Outlet,
   Link,
@@ -10,10 +11,12 @@ export const Route = createRootRouteWithContext()({
 
 function RootLayout() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50">
-      <header className="border-b border-slate-800">
+    <div className="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+      <header className="border-b border-slate-800 bg-slate-900/80 backdrop-blur">
         <nav className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3">
-          <h1 className="text-lg font-semibold">Prime Machine</h1>
+          <h1 className="text-lg font-semibold tracking-tight">
+            Prime Machine
+          </h1>
 
           <div className="flex gap-4 text-sm">
             <Link
@@ -34,12 +37,17 @@ function RootLayout() {
         </nav>
       </header>
 
-      <main className="mx-auto max-w-4xl px-4 py-8">
+      <main className="flex-1 mx-auto w-full max-w-4xl px-4 py-8">
         <Outlet />
       </main>
 
-      <footer className="mx-auto max-w-4xl px-4 pb-6 pt-2 text-xs text-slate-500">
-        TP — Générateur de nombres premiers optimisé
+      <footer className="border-t border-slate-800 bg-slate-900/80">
+        <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-2 text-[11px] text-slate-500">
+          <span>TP — Générateur de nombres premiers optimisé</span>
+          <span className="hidden sm:inline">
+            TanStack Router • TanStack Query • Zustand • Zod • TailwindCSS
+          </span>
+        </div>
       </footer>
     </div>
   );

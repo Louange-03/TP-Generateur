@@ -1,3 +1,4 @@
+// src/main.jsx
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
@@ -10,6 +11,7 @@ import {
   createRoute,
   createRouter,
 } from "@tanstack/react-router";
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import PrimesPage from "./pages/PrimesPage.jsx";
@@ -17,21 +19,25 @@ import PrimesPage from "./pages/PrimesPage.jsx";
 // ---------- Layout racine ----------
 function RootLayout() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50">
-      <header className="border-b border-slate-800">
+    <div className="min-h-screen bg-slate-950 text-slate-50 flex flex-col relative">
+      <header className="border-b border-slate-800 bg-slate-900/80 backdrop-blur">
         <nav className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3">
-          <h1 className="text-lg font-semibold">Prime Machine</h1>
+          <h1 className="text-lg font-semibold tracking-tight">
+            Prime Machine
+          </h1>
 
           <div className="flex gap-4 text-sm">
             <Link
               to="/"
-              className="hover:text-emerald-300 transition-colors [&.active]:text-emerald-400 [&.active]:underline"
+              className="hover:text-emerald-300 transition-colors"
+              activeProps={{ className: "text-emerald-400 underline" }}
             >
               Accueil
             </Link>
             <Link
               to="/primes"
-              className="hover:text-emerald-300 transition-colors [&.active]:text-emerald-400 [&.active]:underline"
+              className="hover:text-emerald-300 transition-colors"
+              activeProps={{ className: "text-emerald-400 underline" }}
             >
               Nombres premiers
             </Link>
@@ -39,13 +45,26 @@ function RootLayout() {
         </nav>
       </header>
 
-      <main className="mx-auto max-w-4xl px-4 py-8">
+      <main className="flex-1 mx-auto w-full max-w-4xl px-4 py-8">
         <Outlet />
       </main>
 
-      <footer className="mx-auto max-w-4xl px-4 pb-6 pt-2 text-xs text-slate-500">
-        TP — Générateur de nombres premiers optimisé
+      <footer className="border-t border-slate-800 bg-slate-900/80">
+        <div className="mx-auto flex max-w-4xl items-center justify-end px-4 py-2 text-[11px] text-slate-500">
+          <span>TP — Générateur de nombres premiers optimisé</span>
+        </div>
       </footer>
+
+      {/* Badge TanStack en bas à gauche */}
+      <a
+        href="https://tanstack.com"
+        target="_blank"
+        rel="noreferrer"
+        className="fixed bottom-4 left-4 z-50 inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-950/90 px-3 py-1.5 text-[11px] font-medium uppercase tracking-wide text-slate-300 shadow-lg shadow-black/40 hover:border-emerald-400 hover:text-emerald-300 transition-colors"
+      >
+        <span className="h-3 w-3 rounded-[4px] bg-gradient-to-br from-emerald-400 via-amber-400 to-rose-500" />
+        <span>TanStack</span>
+      </a>
     </div>
   );
 }
@@ -63,20 +82,15 @@ const indexRoute = createRoute({
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold">Accueil</h2>
         <p className="text-sm text-slate-300">
-          Bienvenue sur la machine à nombres premiers.
+          Bienvenue sur la machine à nombres premiers optimisée.
         </p>
-        <p className="text-sm text-slate-300">Cette application illustre :</p>
-        <ul className="list-disc space-y-1 pl-5 text-sm text-slate-300">
-          <li>TanStack Router pour la navigation.</li>
-          <li>TanStack Query pour les appels asynchrones.</li>
-          <li>Zod pour la validation stricte de la donnée.</li>
-          <li>Zustand pour la logique métier.</li>
-          <li>TailwindCSS pour la mise en forme.</li>
-        </ul>
+        <p className="text-sm text-slate-300">
+          Cette application illustre TanStack Router, TanStack Query, Zustand,
+          Zod et TailwindCSS.
+        </p>
         <p className="text-sm text-slate-400">
-          Rendez-vous sur{" "}
-          <span className="font-mono text-emerald-300">/primes</span> pour
-          jouer avec les nombres premiers.
+          Utilisez le menu ci-dessus pour accéder à{" "}
+          <span className="font-mono text-emerald-300">/primes</span>.
         </p>
       </section>
     );
@@ -91,11 +105,9 @@ const primesRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([indexRoute, primesRoute]);
 
-const router = createRouter({
-  routeTree,
-});
+const router = createRouter({ routeTree });
 
-// ---------- React Query + rendu ----------
+// ---------- React Query ----------
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")).render(

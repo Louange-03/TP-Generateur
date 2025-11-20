@@ -1,40 +1,50 @@
+// src/stores/usePrimeStore.js
 import { create } from "zustand";
 import { verifIsPrime } from "../service/verifIsPrime.jsx";
 
-const initialState = {
+export const usePrimeStore = create((set, get) => ({
   lastNumber: null,
   isPrime: null,
-  mode: null,
-  history: [],
-};
+  mode: "idle", // "api" | "manual" | "idle"
+  history: [],  // { number, isPrime, source }
 
-export const usePrimeStore = create((set) => ({
-  ...initialState,
+  // Appelé quand un nombre vient de l'API (TanStack Query)
+  setFromApi(number) {
+    const prime = verifIsPrime(number);
 
-  setFromApi: (number) =>
-    set((state) => {
-      const isPrime = verifIsPrime(number);
-      const entry = { number, isPrime, source: "api" };
-      return {
-        lastNumber: number,
-        isPrime,
-        mode: "api",
-        history: [...state.history, entry],
-      };
-    }),
+    const entry = {
+      number,
+      isPrime: prime,
+      source: "api",
+    };
 
-  checkManualNumber: (number) =>
-    set((state) => {
-      const isPrime = verifIsPrime(number);
-      const entry = { number, isPrime, source: "manual" };
-      return {
-        lastNumber: number,
-        isPrime,
-        mode: "manual",
-        history: [...state.history, entry],
-      };
-    }),
+    set((state) => ({
+      lastNumber: number,
+      isPrime: prime,
+      mode: "api",
+      history: [entry, ...state.history].slice(0, 40), // limite historique
+    }));
+  },
 
-  setMode: (mode) => set({ mode }),
-  reset: () => set(initialState),
+  // Appelé quand l'utilisateur saisit un nombre
+  checkManualNumber(number) {
+    const prime = verifIsPrime(number);
+
+    const entry = {
+      number,
+      isPrime: prime,
+      source: "manual",
+    };
+
+    set((state) => ({
+      lastNumber: number,
+      isPrime: prime,
+      mode: "manual",
+      history: [entry, ...state.history].slice(0, 40),
+    }));
+  },
+
+  clearHistory() {
+    set({ history: [] });
+  },
 }));
