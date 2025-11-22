@@ -5,17 +5,7 @@
 @layer base {
   body {
     @apply bg-slate-950 text-slate-50 antialiased;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-      "Segoe UI", sans-serif;
-  }
-}
-
-@layer components {
-  .card {
-    @apply rounded-2xl border border-slate-800/80 bg-slate-900/70 p-5 shadow-xl shadow-black/50;
-  }
-
-  .card-muted {
-    @apply rounded-2xl border border-slate-800/80 bg-slate-950/80 p-5 shadow-xl shadow-black/40;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont,
+      "SF Pro Text", "Inter", sans-serif;
   }
 }

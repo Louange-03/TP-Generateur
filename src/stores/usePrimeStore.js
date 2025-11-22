@@ -1,50 +1,67 @@
 // src/stores/usePrimeStore.js
 import { create } from "zustand";
-import { verifIsPrime } from "../service/verifIsPrime.jsx";
+import { isPrime } from "../service/verifIsPrime.jsx";
 
 export const usePrimeStore = create((set, get) => ({
-  lastNumber: null,
-  isPrime: null,
-  mode: "idle", // "api" | "manual" | "idle"
-  history: [],  // { number, isPrime, source }
+  currentNumber: null,
+  isCurrentPrime: null,
+  source: null, // "api" | "manual"
+  history: [],  // [{ value, isPrime, source, id }]
 
-  // Appelé quand un nombre vient de l'API (TanStack Query)
+  // cache { [number]: boolean }
+  cache: {},
+
+  // Utilisé quand le nombre vient de l'API aléatoire
   setFromApi(number) {
-    const prime = verifIsPrime(number);
+    const { cache } = get();
+    let prime;
+    if (cache[number] !== undefined) {
+      prime = cache[number];
+    } else {
+      prime = isPrime(number);
+      cache[number] = prime;
+    }
 
     const entry = {
-      number,
+      id: Date.now() + "_api",
+      value: number,
       isPrime: prime,
       source: "api",
     };
 
     set((state) => ({
-      lastNumber: number,
-      isPrime: prime,
-      mode: "api",
-      history: [entry, ...state.history].slice(0, 40), // limite historique
+      currentNumber: number,
+      isCurrentPrime: prime,
+      source: "api",
+      cache: { ...state.cache, [number]: prime },
+      history: [entry, ...state.history].slice(0, 10),
     }));
   },
 
-  // Appelé quand l'utilisateur saisit un nombre
-  checkManualNumber(number) {
-    const prime = verifIsPrime(number);
+  // Utilisé quand l'utilisateur saisit un nombre
+  checkManual(number) {
+    const { cache } = get();
+    let prime;
+    if (cache[number] !== undefined) {
+      prime = cache[number];
+    } else {
+      prime = isPrime(number);
+      cache[number] = prime;
+    }
 
     const entry = {
-      number,
+      id: Date.now() + "_manual",
+      value: number,
       isPrime: prime,
       source: "manual",
     };
 
     set((state) => ({
-      lastNumber: number,
-      isPrime: prime,
-      mode: "manual",
-      history: [entry, ...state.history].slice(0, 40),
+      currentNumber: number,
+      isCurrentPrime: prime,
+      source: "manual",
+      cache: { ...state.cache, [number]: prime },
+      history: [entry, ...state.history].slice(0, 10),
     }));
-  },
-
-  clearHistory() {
-    set({ history: [] });
   },
 }));

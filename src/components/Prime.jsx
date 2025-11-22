@@ -1,27 +1,21 @@
 // src/components/Prime.jsx
-
-export function Prime({ number, isPrime }) {
-  if (number == null) {
+export default function Prime({ value, isPrime }) {
+  if (value == null) {
     return (
       <p className="text-sm text-slate-400">
-        Aucun nombre analysé pour le moment.
+        Aucune valeur pour le moment. Lancez une requête ou testez un nombre.
       </p>
     );
   }
 
   return (
-    <p className="text-sm">
+    <p className="text-lg">
       Le nombre{" "}
-      <span className="font-semibold text-slate-50">{number}</span>{" "}
+      <span className="font-mono text-emerald-300 font-semibold">{value}</span>{" "}
       est{" "}
-      <span
-        className={
-          isPrime ? "font-semibold text-emerald-400" : "font-semibold text-red-400"
-        }
-      >
-        {isPrime ? "premier" : "composé"}
+      <span className={isPrime ? "text-emerald-400 font-semibold" : "text-rose-400 font-semibold"}>
+        {isPrime ? "premier" : "composé"}.
       </span>
-      .
     </p>
   );
 }
